@@ -1,0 +1,19 @@
+- 热重载（Hot Reload）
+不同于热更新，主要是方便客户端在开发时不用关闭游戏就能重载修改后的代码，从而提升开发效率。
+共分为两部分：1. 检测文件更改（利用C# 的FileSystemWatcher）
+2. 重载修改后的lua 文件（package.loaded["fileName"] 置空，再重新require）
+
+- require 和 loadFile 的区别 (可在ToLua/Examples/02_ScriptsFromFile 场景中测试)
+require: 加载并执行（只在第一次加载文件的时候执行一次）
+dofile: 加载并执行（会重复执行）
+ 
+- 元表与元方法
+__index：通过键来访问table时，如果没找到，就会去找该table的metatable（假定有metatable）中的__index 键, 
+如果__index 是一个表，则在该表中查找相应的键；如果是函数，则返回该函数的返回值。（具体应用可以参考项目的面向对象实现 class.lua）
+__newindex：当给表的一个缺少的键赋值，解释器就会查找__newindex 元方法，如果存在则调用这个函数而不进行赋值操作。
+
+- luaJit
+luajit将Lua脚本编译为bytecode, 相当于一层加密
+
+- LuaState.DoString()
+执行一个程序块，如果是执行其他模块的方法，则该方法应当是全局的。
